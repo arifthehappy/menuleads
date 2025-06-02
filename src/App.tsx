@@ -1,4 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import HowItWorks from './components/HowItWorks';
@@ -8,43 +10,36 @@ import Testimonials from './components/Testimonials';
 import Pricing from './components/Pricing';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import LoginPage from './pages/restaurant/LoginPage';
+import DashboardPage from './pages/restaurant/DashboardPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
-  useEffect(() => {
-    // Update document title
-    document.title = 'MenuLeads | Smart Restaurant Technology';
-    
-    // Add script to track analytics (would be implemented in production)
-    const trackPageView = () => {
-      console.log('Page view tracked');
-      // In production, this would call your analytics service
-    };
-    
-    trackPageView();
-
-    // Implement lazy loading for images
-    if ('loading' in HTMLImageElement.prototype) {
-      const images = document.querySelectorAll('img[loading="lazy"]');
-      images.forEach(img => {
-        img.setAttribute('loading', 'lazy');
-      });
-    }
-  }, []);
-
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      <main>
-        <Hero />
-        <HowItWorks />
-        <ValueProposition />
-        <FeatureShowcase />
-        <Testimonials />
-        <Pricing />
-        <Contact />
-      </main>
-      <Footer />
-    </div>
+    <Router>
+      <Toaster position="top-right" />
+      <Routes>
+        <Route path="/" element={
+          <div className="min-h-screen">
+            <Navbar />
+            <main>
+              <Hero />
+              <HowItWorks />
+              <ValueProposition />
+              <FeatureShowcase />
+              <Testimonials />
+              <Pricing />
+              <Contact />
+            </main>
+            <Footer />
+          </div>
+        } />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin/restaurant" element={<DashboardPage />} />
+        <Route path="/404" element={<NotFoundPage />} />
+        <Route path="*" element={<Navigate to="/404" replace />} />
+      </Routes>
+    </Router>
   );
 }
 

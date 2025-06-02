@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, TabletSmartphone } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -18,7 +22,14 @@ const Navbar: React.FC = () => {
       }
     };
 
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsLoggedIn(!!session);
+    };
+
     window.addEventListener('scroll', handleScroll);
+    checkAuth();
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -32,10 +43,10 @@ const Navbar: React.FC = () => {
     >
       <div className="container mx-auto px-6">
         <nav className="flex items-center justify-between">
-          <a href="#" className="flex items-center text-primary-900">
+          <Link to="/" className="flex items-center text-primary-900">
             <TabletSmartphone size={32} className="mr-2" />
             <span className="font-inter font-bold text-xl">MenuLeads</span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -73,9 +84,15 @@ const Navbar: React.FC = () => {
                 </a>
               </li>
             </ul>
-            <a href="#contact" className="btn btn-primary">
-              Book Demo
-            </a>
+            {isLoggedIn ? (
+              <Link to="/admin/restaurant" className="btn btn-primary">
+                Dashboard
+              </Link>
+            ) : (
+              <Link to="/login" className="btn btn-primary">
+                Login
+              </Link>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -137,13 +154,23 @@ const Navbar: React.FC = () => {
               </a>
             </li>
             <li>
-              <a 
-                href="#contact" 
-                className="inline-block btn btn-primary"
-                onClick={() => setIsOpen(false)}
-              >
-                Book Demo
-              </a>
+              {isLoggedIn ? (
+                <Link
+                  to="/admin/restaurant"
+                  className="inline-block btn btn-primary"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Dashboard
+                </Link>
+              ) : (
+                <Link
+                  to="/login"
+                  className="inline-block btn btn-primary"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Login
+                </Link>
+              )}
             </li>
           </ul>
         </div>
