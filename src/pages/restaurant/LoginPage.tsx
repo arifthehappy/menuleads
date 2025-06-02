@@ -26,7 +26,7 @@ const LoginPage: React.FC = () => {
       const { error } = await supabase.auth.signInWithOtp({
         email: data.email,
         options: {
-          emailRedirectTo: `${window.location.origin}/admin/restaurant`,
+          emailRedirectTo: `${import.meta.env.VITE_APP_URL}/admin/restaurant`,
         },
       });
 
