@@ -37,7 +37,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/admin/restaurant" element={<DashboardPage />} />
         <Route path="/404" element={<NotFoundPage />} />
-        <Route path="*" element={<Navigate to="/404" replace />} />
+        <Route path="*" element={<Navigate to="/404\" replace />} />
       </Routes>
     </Router>
   );
